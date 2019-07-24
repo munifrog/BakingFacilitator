@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="margin_menu_vertical">16dp</dimen>
+    <dimen name="margin_menu_horizontal">16dp</dimen>
+    <dimen name="padding_menu_vertical">16dp</dimen>
+    <dimen name="padding_menu_horizontal">16dp</dimen>
+
+    <dimen name="text_menu_name">32sp</dimen>
+    <dimen name="text_menu_servings">24sp</dimen>
+    <dimen name="text_menu_complexity">24sp</dimen>
+</resources>

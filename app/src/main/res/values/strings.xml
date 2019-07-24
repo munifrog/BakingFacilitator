@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">Baking Facilitator</string>
+
     <string name="recipe_download_url" translatable="false">https://d17h27t6h515a5.cloudfront.net/topher/2017/May/59121517_baking/baking.json</string>
     <string name="error_internet_failure">Internet unavailable!</string>
+
+    <string name="format_servings">%1$d Servings</string>
+    <string name="format_complexity">%1$d Steps</string>
 </resources>

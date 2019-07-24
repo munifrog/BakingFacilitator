@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="@dimen/padding_menu_vertical"
+    android:paddingBottom="@dimen/padding_menu_vertical"
+    android:paddingLeft="@dimen/padding_menu_horizontal"
+    android:paddingStart="@dimen/padding_menu_horizontal"
+    android:paddingEnd="@dimen/padding_menu_horizontal"
+    android:paddingRight="@dimen/padding_menu_horizontal"
+    android:layout_marginTop="@dimen/margin_menu_vertical"
+    android:layout_marginBottom="@dimen/margin_menu_vertical"
+    android:layout_marginStart="@dimen/margin_menu_horizontal"
+    android:layout_marginLeft="@dimen/margin_menu_horizontal"
+    android:layout_marginEnd="@dimen/margin_menu_horizontal"
+    android:layout_marginRight="@dimen/margin_menu_horizontal"
+    android:background="@color/defaultMenuCardBackground"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/tv_menu_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="@dimen/text_menu_name"
+        app:layout_constraintBottom_toTopOf="@+id/guide_horiz"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="Some Kinda Food" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="8dp"
+        android:gravity="center_horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/tv_menu_name"
+        app:layout_constraintStart_toStartOf="@+id/tv_menu_name"
+        app:layout_constraintEnd_toEndOf="@+id/tv_menu_name" >
+
+        <TextView
+            android:id="@+id/tv_menu_servings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_vertical|start"
+            android:textSize="@dimen/text_menu_servings"
+            app:layout_constraintStart_toStartOf="@+id/tv_menu_name"
+            app:layout_constraintTop_toBottomOf="@+id/tv_menu_name"
+            tools:text="16 Servings" />
+
+        <TextView
+            android:id="@+id/tv_menu_complexity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_vertical|end"
+            android:textSize="@dimen/text_menu_complexity"
+            android:paddingStart="16dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="0dp"
+            android:paddingEnd="0dp"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_menu_servings"
+            app:layout_constraintEnd_toEndOf="@+id/tv_menu_name"
+            app:layout_constraintStart_toEndOf="@+id/tv_menu_servings"
+            app:layout_constraintTop_toTopOf="@+id/tv_menu_servings"
+            tools:text="7 Steps" />
+    </LinearLayout>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guide_horiz"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
