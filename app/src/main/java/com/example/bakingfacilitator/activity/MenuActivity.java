@@ -15,11 +15,14 @@ import com.example.bakingfacilitator.thread.ExtractRecipes;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MenuActivity extends AppCompatActivity implements ExtractRecipes.Listener,
         GridMenuAdapter.Listener
 {
+    public static final String PARCELABLE_RECIPE_LIST = "entire_recipe_array";
+
     private static final int COLUMN_SPAN_PORTRAIT_PHONE = 1;
     private static final int COLUMN_SPAN_PORTRAIT_TABLET = 1;
     private static final int COLUMN_SPAN_LANDSCAPE_PHONE = 2;
@@ -33,12 +36,19 @@ public class MenuActivity extends AppCompatActivity implements ExtractRecipes.Li
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
-        ExtractRecipes recipeGetter = new ExtractRecipes(this);
-        String recipeDownload = getString(R.string.recipe_download_url);
-        try {
-            recipeGetter.execute(new URL(recipeDownload));
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
+        mAdapter = new GridMenuAdapter(this);
+
+        if (savedInstanceState == null || !savedInstanceState.containsKey(PARCELABLE_RECIPE_LIST)) {
+            ExtractRecipes recipeGetter = new ExtractRecipes(this);
+            String recipeDownload = getString(R.string.recipe_download_url);
+            try {
+                recipeGetter.execute(new URL(recipeDownload));
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+        } else {
+            List<Recipe> recipes = savedInstanceState.getParcelableArrayList(PARCELABLE_RECIPE_LIST);
+            onLoad(recipes);
         }
 
         Configuration config = getResources().getConfiguration();
@@ -47,7 +57,6 @@ public class MenuActivity extends AppCompatActivity implements ExtractRecipes.Li
         RecyclerView gridView = findViewById(R.id.rv_menu);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, spanCount);
         gridView.setLayoutManager(gridLayoutManager);
-        mAdapter = new GridMenuAdapter(this);
         gridView.setAdapter(mAdapter);
     }
 
@@ -72,5 +81,11 @@ public class MenuActivity extends AppCompatActivity implements ExtractRecipes.Li
 
     @Override
     public void onClick(int position) {
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(PARCELABLE_RECIPE_LIST, (ArrayList<Recipe>) mRecipes);
     }
 }

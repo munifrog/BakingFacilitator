@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ExtractRecipes extends AsyncTask<URL, Void, List<Recipe>> {
-    Listener mListener;
+    private Listener mListener;
 
     public ExtractRecipes(Listener listener) {
         mListener = listener;
