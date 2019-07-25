@@ -9,6 +9,8 @@
     <dimen name="padding_recipe_horizontal">16dp</dimen>
     <dimen name="padding_recipe_ingredient_horizontal">16dp</dimen>
     <dimen name="padding_recipe_ingredient_vertical">4dp</dimen>
+    <dimen name="padding_recipe_direction_horizontal">16dp</dimen>
+    <dimen name="padding_recipe_direction_vertical">16dp</dimen>
 
     <dimen name="text_menu_name">32sp</dimen>
     <dimen name="text_menu_servings">24sp</dimen>
@@ -16,4 +18,7 @@
 
     <dimen name="text_recipe_name">32sp</dimen>
     <dimen name="text_recipe_ingredient">20sp</dimen>
+
+    <dimen name="text_direction_order">40sp</dimen>
+    <dimen name="text_direction_description">32sp</dimen>
 </resources>

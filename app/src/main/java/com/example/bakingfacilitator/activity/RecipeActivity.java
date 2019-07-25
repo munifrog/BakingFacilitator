@@ -10,13 +10,16 @@ import android.util.Log;
 import android.widget.TextView;
 
 import com.example.bakingfacilitator.R;
+import com.example.bakingfacilitator.adapt.LinearDirectionAdapter;
 import com.example.bakingfacilitator.adapt.LinearIngredientAdapter;
 import com.example.bakingfacilitator.model.Ingredient;
 import com.example.bakingfacilitator.model.Recipe;
 
 import java.util.List;
 
-public class RecipeActivity extends AppCompatActivity implements LinearIngredientAdapter.Listener {
+public class RecipeActivity extends AppCompatActivity implements LinearIngredientAdapter.Listener,
+        LinearDirectionAdapter.Listener
+{
     private static final String TAG = RecipeActivity.class.getSimpleName();
 
     public static final String PARCELABLE_RECIPE = "one_recipe";
@@ -55,11 +58,24 @@ public class RecipeActivity extends AppCompatActivity implements LinearIngredien
             );
             rvIngredients.setAdapter(ingredientAdapter);
 
+            RecyclerView rvDirections = findViewById(R.id.rv_directions);
+            LinearLayoutManager directionManager = new LinearLayoutManager(this);
+            rvDirections.setLayoutManager(directionManager);
+            LinearDirectionAdapter directionAdapter = new LinearDirectionAdapter(
+                    mRecipe.getDirections(),
+                    this
+            );
+            rvDirections.setAdapter(directionAdapter);
         }
     }
 
     @Override
     public void onIngredientClick(int position) {
+
+    }
+
+    @Override
+    public void onDirectionClick(int position) {
 
     }
 }
