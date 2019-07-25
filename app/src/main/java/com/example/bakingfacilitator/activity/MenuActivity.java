@@ -1,5 +1,6 @@
 package com.example.bakingfacilitator.activity;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -17,6 +18,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.example.bakingfacilitator.activity.RecipeActivity.PARCELABLE_RECIPE;
 
 public class MenuActivity extends AppCompatActivity implements ExtractRecipes.Listener,
         GridMenuAdapter.Listener
@@ -81,6 +84,11 @@ public class MenuActivity extends AppCompatActivity implements ExtractRecipes.Li
 
     @Override
     public void onClick(int position) {
+        if (mRecipes != null) {
+            Intent recipeIntent = new Intent(MenuActivity.this, RecipeActivity.class);
+            recipeIntent.putExtra(PARCELABLE_RECIPE, mRecipes.get(position));
+            startActivity(recipeIntent);
+        }
     }
 
     @Override

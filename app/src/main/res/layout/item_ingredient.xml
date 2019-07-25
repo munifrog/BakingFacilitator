@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/cb_ingredient"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
+        android:checked="false"
+        android:textColor="@color/textRecipe"
+        android:textSize="@dimen/text_recipe_ingredient"
+        android:paddingTop="@dimen/padding_recipe_ingredient_vertical"
+        android:paddingBottom="@dimen/padding_recipe_ingredient_vertical"
+        android:paddingLeft="@dimen/padding_recipe_ingredient_horizontal"
+        android:paddingStart="@dimen/padding_recipe_ingredient_horizontal"
+        android:paddingRight="@dimen/padding_recipe_ingredient_horizontal"
+        android:paddingEnd="@dimen/padding_recipe_ingredient_horizontal"
+        tools:text="\u2022 (1 CUP) Ingredient" />
+
+</FrameLayout>

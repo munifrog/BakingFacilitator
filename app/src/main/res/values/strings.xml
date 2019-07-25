@@ -6,4 +6,14 @@
 
     <string name="format_servings">%1$d Servings</string>
     <string name="format_complexity">%1$d Steps</string>
+    <string name="format_ingredient_unit">\u2022 (%1$.0f %2$s) %3$s</string>
+    <string name="format_ingredient_portion">\u2022 (%1$.02f %2$s) %3$s</string>
+
+    <string name="conversion_whole_entire">entire</string>
+    <string name="conversion_gram_kilo">kg</string>
+    <string name="conversion_gram">g</string>
+    <string name="conversion_cup">cup</string>
+    <string name="conversion_ounce">oz</string>
+    <string name="conversion_teaspoon">tsp</string>
+    <string name="conversion_tablespoon">tblspn</string>
 </resources>
