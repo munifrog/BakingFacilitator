@@ -88,8 +88,10 @@ public class LinearIngredientAdapter extends RecyclerView.Adapter<LinearIngredie
             }
 
             String unit = ingredient.getUnit();
+            boolean bAddSpace = true;
             if (JSON_ENTIRE.equals(unit)) {
                 unit = mResources.getString(R.string.conversion_whole_entire);
+                bAddSpace = false;
             } else if (JSON_GRAM_KILO.equals(unit)) {
                 unit = mResources.getString(R.string.conversion_gram_kilo);
             } else if (JSON_GRAM.equals(unit)) {
@@ -102,6 +104,9 @@ public class LinearIngredientAdapter extends RecyclerView.Adapter<LinearIngredie
                 unit = mResources.getString(R.string.conversion_tablespoon);
             } else if (JSON_TEA_SPOON.equals(unit)) {
                 unit = mResources.getString(R.string.conversion_teaspoon);
+            }
+            if (bAddSpace) {
+                unit = " " + unit;
             }
 
             mCheckBox.setText(mView.getResources().getString(
