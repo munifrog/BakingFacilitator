@@ -7,6 +7,8 @@
     <color name="defaultMenuBackground">#ff404040</color>
     <color name="defaultMenuCardBackground">#c0817D7D</color>
     <color name="defaultRecipeBackground">#ff404040</color>
+    <color name="defaultViewerBackground">#ff404040</color>
 
     <color name="textRecipe">#FFFFFFFF</color>
+    <color name="textViewer">#FFFFFFFF</color>
 </resources>

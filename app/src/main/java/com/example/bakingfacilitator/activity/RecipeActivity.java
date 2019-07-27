@@ -13,6 +13,8 @@ import com.example.bakingfacilitator.adapt.LinearDirectionAdapter;
 import com.example.bakingfacilitator.adapt.LinearIngredientAdapter;
 import com.example.bakingfacilitator.model.Recipe;
 
+import static com.example.bakingfacilitator.activity.ViewerActivity.PARCELABLE_DIRECTION;
+
 public class RecipeActivity extends AppCompatActivity implements LinearIngredientAdapter.Listener,
         LinearDirectionAdapter.Listener
 {
@@ -62,6 +64,8 @@ public class RecipeActivity extends AppCompatActivity implements LinearIngredien
 
     @Override
     public void onDirectionClick(int position) {
-
+        Intent intent = new Intent(RecipeActivity.this, ViewerActivity.class);
+        intent.putExtra(PARCELABLE_DIRECTION, mRecipe.getDirections().get(position));
+        startActivity(intent);
     }
 }
