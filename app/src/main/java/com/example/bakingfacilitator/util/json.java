@@ -27,6 +27,11 @@ public class json {
     private static final String RECIPE_L01_ONE_SERVINGS               = "servings";
     private static final String RECIPE_L01_ONE_IMAGE                  = "image";
 
+    private static final String REGEX_FIND_INITIAL_NUMBERING          = "[0-9]+\\.\\s+";
+    private static final String REGEX_REPLACE_INITIAL_NUMBERING       = "";
+    private static final String REGEX_FIND_DEGREE_TEMPERATURE         = "\ufffd";
+    private static final String REGEX_REPLACE_DEGREE_TEMPERATURE      = "\u00b0";
+
     public static List<Recipe> extractRecipe(String json) {
         List<Recipe> recipes = new ArrayList<>();
         try {
@@ -81,6 +86,14 @@ public class json {
                         directionOrder = currentDirection.getLong(RECIPE_L02_DIRECTION_ONE_ORDER);
                         directionDescribeShort = currentDirection.getString(RECIPE_L02_DIRECTION_ONE_DESC_SHORT);
                         directionDescribeFull = currentDirection.getString(RECIPE_L02_DIRECTION_ONE_DESC_FULL);
+                        directionDescribeFull = directionDescribeFull.replaceFirst(
+                                REGEX_FIND_DEGREE_TEMPERATURE,
+                                REGEX_REPLACE_DEGREE_TEMPERATURE
+                        );
+                        directionDescribeFull = directionDescribeFull.replaceFirst(
+                                REGEX_FIND_INITIAL_NUMBERING,
+                                REGEX_REPLACE_INITIAL_NUMBERING
+                        );
                         directionUrlVideo = currentDirection.getString(RECIPE_L02_DIRECTION_ONE_URL_VIDEO);
                         directionUrlThumb = currentDirection.getString(RECIPE_L02_DIRECTION_ONE_URL_THUMB);
                         Direction newDirection = new Direction(
