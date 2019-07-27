@@ -67,6 +67,7 @@ public class LinearIngredientAdapter extends RecyclerView.Adapter<LinearIngredie
 
         ViewHolder(View view) {
             super(view);
+            view.setOnClickListener(this);
             mView = view;
             mResources = mView.getResources();
         }

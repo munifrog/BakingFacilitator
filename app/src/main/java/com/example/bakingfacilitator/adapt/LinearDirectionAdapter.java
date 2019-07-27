@@ -58,6 +58,7 @@ public class LinearDirectionAdapter extends RecyclerView.Adapter<LinearDirection
 
         ViewHolder(View view) {
             super(view);
+            view.setOnClickListener(this);
             mView = view;
             mResources = view.getResources();
         }
