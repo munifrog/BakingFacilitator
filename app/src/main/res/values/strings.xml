@@ -6,8 +6,8 @@
 
     <string name="format_servings">%1$d Servings</string>
     <string name="format_complexity">%1$d Steps</string>
-    <string name="format_ingredient_unit">\u2022 (%1$.0f %2$s) %3$s</string>
-    <string name="format_ingredient_portion">\u2022 (%1$.02f %2$s) %3$s</string>
+    <string name="format_ingredient_unit">%1$.0f %2$s : %3$s</string>
+    <string name="format_ingredient_portion">%1$.02f %2$s : %3$s</string>
     <string name="format_direction_order">#%1$d</string>
 
     <string name="conversion_whole_entire">entire</string>

@@ -27,39 +27,43 @@ public class RecipeActivity extends AppCompatActivity implements LinearIngredien
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
 
-        Intent intent = getIntent();
-
-        if (intent == null || !intent.hasExtra(PARCELABLE_RECIPE)) {
-            finish();
+        if (savedInstanceState != null && savedInstanceState.containsKey(PARCELABLE_RECIPE)) {
+            mRecipe = savedInstanceState.getParcelable(PARCELABLE_RECIPE);
         } else {
-            mRecipe = intent.getParcelableExtra(PARCELABLE_RECIPE);
-
-            TextView tvName = findViewById(R.id.tv_recipe_name);
-            tvName.setText(mRecipe.getRecipeName());
-
-            RecyclerView rvIngredients = findViewById(R.id.rv_ingredients);
-            LinearLayoutManager ingredientManager = new LinearLayoutManager(this);
-            rvIngredients.setLayoutManager(ingredientManager);
-            LinearIngredientAdapter ingredientAdapter = new LinearIngredientAdapter(
-                    mRecipe.getIngredients(),
-                    this
-            );
-            rvIngredients.setAdapter(ingredientAdapter);
-
-            RecyclerView rvDirections = findViewById(R.id.rv_directions);
-            LinearLayoutManager directionManager = new LinearLayoutManager(this);
-            rvDirections.setLayoutManager(directionManager);
-            LinearDirectionAdapter directionAdapter = new LinearDirectionAdapter(
-                    mRecipe.getDirections(),
-                    this
-            );
-            rvDirections.setAdapter(directionAdapter);
+            Intent intent = getIntent();
+            if (intent == null || !intent.hasExtra(PARCELABLE_RECIPE)) {
+                finish();
+            } else {
+                mRecipe = intent.getParcelableExtra(PARCELABLE_RECIPE);
+            }
         }
+
+        TextView tvName = findViewById(R.id.tv_recipe_name);
+        tvName.setText(mRecipe.getRecipeName());
+
+        RecyclerView rvIngredients = findViewById(R.id.rv_ingredients);
+        LinearLayoutManager ingredientManager = new LinearLayoutManager(this);
+        rvIngredients.setLayoutManager(ingredientManager);
+        LinearIngredientAdapter ingredientAdapter = new LinearIngredientAdapter(
+                mRecipe.getIngredients(),
+                mRecipe.getChecked(),
+                this
+        );
+        rvIngredients.setAdapter(ingredientAdapter);
+
+        RecyclerView rvDirections = findViewById(R.id.rv_directions);
+        LinearLayoutManager directionManager = new LinearLayoutManager(this);
+        rvDirections.setLayoutManager(directionManager);
+        LinearDirectionAdapter directionAdapter = new LinearDirectionAdapter(
+                mRecipe.getDirections(),
+                this
+        );
+        rvDirections.setAdapter(directionAdapter);
     }
 
     @Override
     public void onIngredientClick(int position) {
-
+        mRecipe.setChecked(position, mRecipe.getChecked(position));
     }
 
     @Override
@@ -67,5 +71,11 @@ public class RecipeActivity extends AppCompatActivity implements LinearIngredien
         Intent intent = new Intent(RecipeActivity.this, ViewerActivity.class);
         intent.putExtra(PARCELABLE_DIRECTION, mRecipe.getDirections().get(position));
         startActivity(intent);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(PARCELABLE_RECIPE, mRecipe);
     }
 }

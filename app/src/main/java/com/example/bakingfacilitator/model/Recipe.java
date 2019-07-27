@@ -9,6 +9,7 @@ public class Recipe implements Parcelable {
     private long mOrder;
     private String mRecipeName;
     private List<Ingredient> mIngredients;
+    private boolean[] mChecked;
     private List<Direction> mDirections;
     private int mServings;
     private String mImage;
@@ -24,6 +25,7 @@ public class Recipe implements Parcelable {
         mOrder = order;
         mRecipeName = name;
         mIngredients = ingredients;
+        mChecked = new boolean[ingredients.size()];
         mDirections = directions;
         mServings = servings;
         mImage = image;
@@ -37,6 +39,12 @@ public class Recipe implements Parcelable {
 
     public void setIngredients(List<Ingredient> mIngredients) { this.mIngredients = mIngredients; }
     public List<Ingredient> getIngredients() { return mIngredients; }
+
+    public boolean[] getChecked() { return mChecked; }
+    public void setChecked(boolean[] mChecked) { this.mChecked = mChecked; }
+
+    public boolean getChecked(int position) { return mChecked[position]; }
+    public void setChecked(int position, boolean newState) { this.mChecked[position] = newState; }
 
     public void setDirections(List<Direction> mDirections) { this.mDirections = mDirections; }
     public List<Direction> getDirections() { return mDirections; }
@@ -57,6 +65,7 @@ public class Recipe implements Parcelable {
         dest.writeLong(getOrder());
         dest.writeString(getRecipeName());
         dest.writeList(getIngredients());
+        dest.writeBooleanArray(getChecked());
         dest.writeList(getDirections());
         dest.writeInt(getServings());
         dest.writeString(getImage());
@@ -65,7 +74,11 @@ public class Recipe implements Parcelable {
     private Recipe (Parcel parcel) {
         setOrder(parcel.readLong());
         setRecipeName(parcel.readString());
-        setIngredients(parcel.readArrayList(Ingredient.class.getClassLoader()));
+        List<Ingredient> ingredients = parcel.readArrayList(Ingredient.class.getClassLoader());
+        setIngredients(ingredients);
+        boolean [] array = new boolean[ingredients.size()];
+        parcel.readBooleanArray(array);
+        setChecked(array);
         setDirections(parcel.readArrayList(Direction.class.getClassLoader()));
         setServings(parcel.readInt());
         setImage(parcel.readString());

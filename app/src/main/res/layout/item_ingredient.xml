@@ -3,9 +3,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:paddingLeft="@dimen/padding_recipe_ingredient_horizontal"
+    android:paddingStart="@dimen/padding_recipe_ingredient_horizontal"
+    android:paddingRight="@dimen/padding_recipe_ingredient_horizontal"
+    android:paddingEnd="@dimen/padding_recipe_ingredient_horizontal" >
 
-    <TextView
+    <CheckBox
         android:id="@+id/cb_ingredient"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

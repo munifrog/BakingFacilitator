@@ -5,7 +5,7 @@ import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.CheckBox;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,19 +16,21 @@ import com.example.bakingfacilitator.model.Ingredient;
 import java.util.List;
 
 public class LinearIngredientAdapter extends RecyclerView.Adapter<LinearIngredientAdapter.ViewHolder> {
-    private static final String JSON_CUP = "CUP";
-    private static final String JSON_TABLE_SPOON = "TBLSP";
-    private static final String JSON_TEA_SPOON = "TSP";
-    private static final String JSON_GRAM_KILO = "K";
-    private static final String JSON_GRAM = "G";
-    private static final String JSON_OUNCE = "OZ";
-    private static final String JSON_ENTIRE = "UNIT";
+    private static final String JSON_CUP                     = "CUP";
+    private static final String JSON_TABLE_SPOON             = "TBLSP";
+    private static final String JSON_TEA_SPOON               = "TSP";
+    private static final String JSON_GRAM_KILO               = "K";
+    private static final String JSON_GRAM                    = "G";
+    private static final String JSON_OUNCE                   = "OZ";
+    private static final String JSON_ENTIRE                  = "UNIT";
 
     private Listener mListener;
     private List<Ingredient> mIngredients;
+    private boolean [] mChecks;
 
-    public LinearIngredientAdapter(List<Ingredient> ingredients, Listener listener) {
+    public LinearIngredientAdapter(List<Ingredient> ingredients, boolean [] checks, Listener listener) {
         mIngredients = ingredients;
+        mChecks = checks;
         mListener = listener;
     }
 
@@ -63,7 +65,7 @@ public class LinearIngredientAdapter extends RecyclerView.Adapter<LinearIngredie
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private View mView;
         private Resources mResources;
-        private TextView mTextView;
+        private CheckBox mCheckBox;
 
         ViewHolder(View view) {
             super(view);
@@ -74,7 +76,9 @@ public class LinearIngredientAdapter extends RecyclerView.Adapter<LinearIngredie
 
         void bind(int position) {
             Ingredient ingredient = mIngredients.get(position);
-            mTextView = mView.findViewById(R.id.cb_ingredient);
+            mCheckBox = mView.findViewById(R.id.cb_ingredient);
+            mCheckBox.setChecked(mChecks[position]);
+            mCheckBox.setOnClickListener(this);
 
             float amount = ingredient.getAmount();
             int resId = R.string.format_ingredient_unit;
@@ -100,7 +104,7 @@ public class LinearIngredientAdapter extends RecyclerView.Adapter<LinearIngredie
                 unit = mResources.getString(R.string.conversion_teaspoon);
             }
 
-            mTextView.setText(mView.getResources().getString(
+            mCheckBox.setText(mView.getResources().getString(
                     resId,
                     amount,
                     unit,
@@ -110,7 +114,9 @@ public class LinearIngredientAdapter extends RecyclerView.Adapter<LinearIngredie
 
         @Override
         public void onClick(View v) {
-            mListener.onIngredientClick(getAdapterPosition());
+            int position = getAdapterPosition();
+            mChecks[position] = !mChecks[position];
+            mListener.onIngredientClick(position);
         }
     }
 }
