@@ -1,53 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/defaultViewerBackground" >
 
-    <ScrollView
+    <include layout="@layout/fragment_direction_viewer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <com.google.android.exoplayer2.ui.SimpleExoPlayerView
-                android:id="@+id/exo_player_frame"
-                android:layout_width="match_parent"
-                android:layout_height="500dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="@dimen/padding_viewer_player_vertical"
-                android:layout_marginBottom="@dimen/padding_viewer_player_vertical"
-                android:layout_marginRight="@dimen/padding_viewer_player_horizontal"
-                android:layout_marginLeft="@dimen/padding_viewer_player_horizontal"
-                android:visibility="gone" />
-
-            <TextView
-                android:id="@+id/tv_description"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingTop="@dimen/padding_viewer_description_vertical"
-                android:paddingBottom="@dimen/padding_viewer_description_vertical"
-                android:paddingLeft="@dimen/padding_viewer_description_horizontal"
-                android:paddingStart="@dimen/padding_viewer_description_horizontal"
-                android:paddingRight="@dimen/padding_viewer_description_horizontal"
-                android:paddingEnd="@dimen/padding_viewer_description_horizontal"
-                android:textSize="@dimen/text_viewer_description"
-                android:textColor="@color/textViewer"
-                tools:text="Perform some instruction here" />
-
-        </LinearLayout>
-
-    </ScrollView>
-
-    <ProgressBar
-        android:id="@+id/pb_loading_indicator"
-        android:layout_width="42dp"
-        android:layout_height="42dp"
-        android:layout_gravity="center"
-        android:visibility="invisible" />
+        android:layout_height="match_parent"
+        android:layout_gravity="center"/>
 
 </FrameLayout>
+
