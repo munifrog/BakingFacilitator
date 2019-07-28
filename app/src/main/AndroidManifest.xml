@@ -18,8 +18,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.RecipeActivity"/>
-        <activity android:name=".activity.ViewerActivity"/>
+        <activity android:name=".activity.RecipeActivity"
+            android:theme="@style/SansToolBarTheme" />
+        <activity android:name=".activity.ViewerActivity"
+            android:theme="@style/SansToolBarTheme" />
     </application>
 
 </manifest>
