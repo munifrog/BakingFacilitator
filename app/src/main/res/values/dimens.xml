@@ -20,7 +20,7 @@
     <dimen name="text_menu_complexity">24sp</dimen>
 
     <dimen name="text_recipe_name">32sp</dimen>
-    <dimen name="text_recipe_ingredient">20sp</dimen>
+    <dimen name="text_recipe_ingredient">24sp</dimen>
 
     <dimen name="text_direction_order">40sp</dimen>
     <dimen name="text_direction_description">32sp</dimen>

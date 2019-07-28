@@ -3,6 +3,8 @@ package com.example.bakingfacilitator.activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -42,6 +44,8 @@ public class MenuActivity extends AppCompatActivity implements ExtractRecipes.Li
         mAdapter = new GridMenuAdapter(this);
 
         if (savedInstanceState == null || !savedInstanceState.containsKey(PARCELABLE_RECIPE_LIST)) {
+            ProgressBar pb = findViewById(R.id.pb_loading_indicator);
+            pb.setVisibility(View.VISIBLE);
             ExtractRecipes recipeGetter = new ExtractRecipes(this);
             String recipeDownload = getString(R.string.recipe_download_url);
             try {
@@ -75,6 +79,8 @@ public class MenuActivity extends AppCompatActivity implements ExtractRecipes.Li
     public void onLoad(List<Recipe> recipes) {
         mRecipes = recipes;
         mAdapter.setRecipes(recipes);
+        ProgressBar pb = findViewById(R.id.pb_loading_indicator);
+        pb.setVisibility(View.GONE);
     }
 
     @Override

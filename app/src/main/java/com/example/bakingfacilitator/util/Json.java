@@ -11,7 +11,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class json {
+public class Json {
     private static final String RECIPE_L01_ONE_ID                     = "id";
     private static final String RECIPE_L01_ONE_NAME                   = "name";
     private static final String RECIPE_L01_LIST_INGREDIENTS           = "ingredients";
@@ -31,6 +31,8 @@ public class json {
     private static final String REGEX_REPLACE_INITIAL_NUMBERING       = "";
     private static final String REGEX_FIND_DEGREE_TEMPERATURE         = "\ufffd";
     private static final String REGEX_REPLACE_DEGREE_TEMPERATURE      = "\u00b0";
+    private static final String REGEX_FIND_ENDING_PERIOD              = "\\.\\s*$";
+    private static final String REGEX_REPLACE_ENDING_PERIOD           = "";
 
     public static List<Recipe> extractRecipe(String json) {
         List<Recipe> recipes = new ArrayList<>();
@@ -85,6 +87,10 @@ public class json {
                         currentDirection = (JSONObject) jsonDirections.get(j);
                         directionOrder = currentDirection.getLong(RECIPE_L02_DIRECTION_ONE_ORDER);
                         directionDescribeShort = currentDirection.getString(RECIPE_L02_DIRECTION_ONE_DESC_SHORT);
+                        directionDescribeShort = directionDescribeShort.replaceFirst(
+                                REGEX_FIND_ENDING_PERIOD,
+                                REGEX_REPLACE_ENDING_PERIOD
+                        );
                         directionDescribeFull = currentDirection.getString(RECIPE_L02_DIRECTION_ONE_DESC_FULL);
                         directionDescribeFull = directionDescribeFull.replaceFirst(
                                 REGEX_FIND_DEGREE_TEMPERATURE,
