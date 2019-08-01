@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activity.MenuActivity">
+
+    <TextView
+        android:id="@+id/tv_recipe_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/defaultRecipeBackground"
+        android:gravity="center"
+        android:paddingTop="@dimen/padding_recipe_vertical"
+        android:paddingBottom="@dimen/padding_recipe_vertical"
+        android:paddingStart="@dimen/padding_recipe_horizontal"
+        android:paddingLeft="@dimen/padding_recipe_horizontal"
+        android:paddingRight="@dimen/padding_recipe_horizontal"
+        android:paddingEnd="@dimen/padding_recipe_horizontal"
+        android:textSize="@dimen/text_recipe_name"
+        tools:text="Some Kinda Food"
+        android:textColor="@color/textRecipe" />
+
+    <View style="@style/DividerHorizontal"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_ingredients"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1.4"
+        android:background="@color/defaultRecipeBackground" />
+
+    <View style="@style/DividerHorizontal"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_directions"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3"
+        android:background="@color/defaultRecipeBackground" />
+</LinearLayout>

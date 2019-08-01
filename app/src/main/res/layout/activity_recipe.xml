@@ -1,43 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".activity.MenuActivity">
+    android:background="@color/defaultViewerBackground" >
 
-    <TextView
-        android:id="@+id/tv_recipe_name"
+    <include layout="@layout/fragment_recipe_overview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/defaultRecipeBackground"
-        android:gravity="center"
-        android:paddingTop="@dimen/padding_recipe_vertical"
-        android:paddingBottom="@dimen/padding_recipe_vertical"
-        android:paddingStart="@dimen/padding_recipe_horizontal"
-        android:paddingLeft="@dimen/padding_recipe_horizontal"
-        android:paddingRight="@dimen/padding_recipe_horizontal"
-        android:paddingEnd="@dimen/padding_recipe_horizontal"
-        android:textSize="@dimen/text_recipe_name"
-        tools:text="Some Kinda Food"
-        android:textColor="@color/textRecipe" />
+        android:layout_height="match_parent"
+        android:layout_gravity="center"/>
 
-    <View style="@style/DividerHorizontal"/>
+</FrameLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_ingredients"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1.4"
-        android:background="@color/defaultRecipeBackground" />
-
-    <View style="@style/DividerHorizontal"/>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_directions"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="3"
-        android:background="@color/defaultRecipeBackground" />
-</LinearLayout>

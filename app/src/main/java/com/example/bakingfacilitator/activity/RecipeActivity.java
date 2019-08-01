@@ -1,6 +1,7 @@
 package com.example.bakingfacilitator.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,8 +20,13 @@ public class RecipeActivity extends AppCompatActivity implements LinearIngredien
         LinearDirectionAdapter.Listener
 {
     public static final String PARCELABLE_RECIPE = "one_recipe";
+    public static final String CURRENT_DIRECTION = "current_direction";
 
     private Recipe mRecipe;
+    private boolean mTwoPane;
+    private int mCurrentDirection;
+    private FragmentManager mFragmentManager;
+    private DirectionViewerFragment mFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,12 +35,14 @@ public class RecipeActivity extends AppCompatActivity implements LinearIngredien
 
         if (savedInstanceState != null && savedInstanceState.containsKey(PARCELABLE_RECIPE)) {
             mRecipe = savedInstanceState.getParcelable(PARCELABLE_RECIPE);
+            mCurrentDirection = savedInstanceState.getInt(CURRENT_DIRECTION, 0);
         } else {
             Intent intent = getIntent();
             if (intent == null || !intent.hasExtra(PARCELABLE_RECIPE)) {
                 finish();
             } else {
                 mRecipe = intent.getParcelableExtra(PARCELABLE_RECIPE);
+                mCurrentDirection = 0;
             }
         }
 
@@ -59,6 +67,14 @@ public class RecipeActivity extends AppCompatActivity implements LinearIngredien
                 this
         );
         rvDirections.setAdapter(directionAdapter);
+
+        mTwoPane = findViewById(R.id.two_pane_view) != null;
+        if (mTwoPane) {
+            mFragment = DirectionViewerFragment.newInstance(
+                    mRecipe.getDirections().get(mCurrentDirection)
+            );
+            mFragmentManager = getSupportFragmentManager();
+        }
     }
 
     @Override
@@ -68,14 +84,45 @@ public class RecipeActivity extends AppCompatActivity implements LinearIngredien
 
     @Override
     public void onDirectionClick(int position) {
-        Intent intent = new Intent(RecipeActivity.this, ViewerActivity.class);
-        intent.putExtra(PARCELABLE_DIRECTION, mRecipe.getDirections().get(position));
-        startActivity(intent);
+        mCurrentDirection = position;
+        if (mTwoPane) {
+            mFragment = DirectionViewerFragment.newInstance(
+                    mRecipe.getDirections().get(mCurrentDirection)
+            );
+            mFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_direction, mFragment)
+                    .commit();
+        } else {
+            Intent intent = new Intent(RecipeActivity.this, ViewerActivity.class);
+            intent.putExtra(PARCELABLE_DIRECTION, mRecipe.getDirections().get(position));
+            startActivity(intent);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mTwoPane && mFragmentManager != null) {
+            mFragmentManager.beginTransaction()
+                    .add(R.id.fragment_direction, mFragment)
+                    .commit();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mTwoPane && mFragmentManager != null) {
+            mFragmentManager.beginTransaction()
+                    .detach(mFragment)
+                    .commit();
+        }
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable(PARCELABLE_RECIPE, mRecipe);
+        outState.putInt(CURRENT_DIRECTION, mCurrentDirection);
     }
 }

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="text_recipe_ingredient">16sp</dimen>
+    <dimen name="text_direction_order">32sp</dimen>
+    <dimen name="text_direction_description">24sp</dimen>
+</resources>
