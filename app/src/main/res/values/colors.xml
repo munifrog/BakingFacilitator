@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="chocolateSuperLight">#A57538</color>
+    <color name="chocolateLight">#7A4A1D</color>
+    <color name="chocolateDark">#522F16</color>
+    <color name="vanilla">#E6DEB8</color>
+    <color name="custard">#FFE69C</color>
 
-    <color name="defaultMenuBackground">#ff404040</color>
-    <color name="defaultMenuCardBackground">#c0817D7D</color>
-    <color name="defaultRecipeBackground">#ff404040</color>
-    <color name="defaultViewerBackground">#ff404040</color>
+    <color name="colorPrimary">@color/chocolateLight</color>
+    <color name="colorPrimaryDark">@color/chocolateDark</color>
+    <color name="colorAccent">@color/vanilla</color>
 
-    <color name="textRecipe">#FFFFFFFF</color>
-    <color name="textViewer">#FFFFFFFF</color>
+    <color name="defaultMenuBackground">@color/chocolateSuperLight</color>
+    <color name="defaultMenuCardBackground">@color/vanilla</color>
+    <color name="defaultRecipeBackground">@color/chocolateLight</color>
+    <color name="defaultViewerBackground">@color/vanilla</color>
+
+    <color name="textMenuCard">@color/chocolateLight</color>
+    <color name="textRecipe">@color/vanilla</color>
+    <color name="textViewer">@color/chocolateLight</color>
 </resources>

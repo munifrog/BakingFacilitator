@@ -24,6 +24,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:textSize="@dimen/text_menu_name"
+        android:textColor="@color/textMenuCard"
         app:layout_constraintBottom_toTopOf="@+id/guide_horiz"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
@@ -47,6 +48,7 @@
             android:layout_weight="1"
             android:gravity="center_vertical|start"
             android:textSize="@dimen/text_menu_servings"
+            android:textColor="@color/textMenuCard"
             app:layout_constraintStart_toStartOf="@+id/tv_menu_name"
             app:layout_constraintTop_toBottomOf="@+id/tv_menu_name"
             tools:text="16 Servings" />
@@ -58,6 +60,7 @@
             android:layout_weight="1"
             android:gravity="center_vertical|end"
             android:textSize="@dimen/text_menu_complexity"
+            android:textColor="@color/textMenuCard"
             android:paddingStart="16dp"
             android:paddingLeft="16dp"
             android:paddingRight="0dp"
