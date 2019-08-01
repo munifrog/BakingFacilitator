@@ -27,7 +27,7 @@
 
             <TextView
                 android:id="@+id/tv_description"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="@dimen/padding_viewer_description_vertical"
                 android:paddingBottom="@dimen/padding_viewer_description_vertical"
@@ -38,6 +38,52 @@
                 android:textSize="@dimen/text_viewer_description"
                 android:textColor="@color/textViewer"
                 tools:text="Perform some instruction here" />
+
+            <LinearLayout
+                android:id="@+id/btn_direction_navigation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <View style="@style/DividerHorizontal"
+                    android:background="@color/textViewer"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="bottom"
+                    android:layout_gravity="bottom" >
+
+                    <Button
+                        android:id="@+id/btn_previous"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:onClick="onPreviousClick"
+                        android:text="@string/button_previous"
+                        android:textColor="@color/textViewer"
+                        style="?android:attr/buttonBarButtonStyle" />
+
+                    <View style="@style/DividerVertical"
+                        android:background="@color/textViewer"/>
+
+                    <Button
+                        android:id="@+id/btn_next"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:onClick="onNextClick"
+                        android:text="@string/button_next"
+                        android:textColor="@color/textViewer"
+                        style="?android:attr/buttonBarButtonStyle" />
+
+                </LinearLayout>
+
+                <View style="@style/DividerHorizontal"
+                    android:background="@color/textViewer"/>
+
+            </LinearLayout>
 
         </LinearLayout>
 

@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -65,6 +66,9 @@ public class DirectionViewerFragment extends Fragment implements Media.Listener 
         );
 
         if (getArguments() != null) {
+            LinearLayout buttonView = view.findViewById(R.id.btn_direction_navigation);
+            buttonView.setVisibility(View.GONE);
+
             mDirection = getArguments().getParcelable(PARCELABLE_DIRECTION);
 
             TextView tvDirection = view.findViewById(R.id.tv_description);
