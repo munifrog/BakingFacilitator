@@ -34,6 +34,10 @@ public class Json {
     private static final String REGEX_REPLACE_DEGREE_TEMPERATURE      = "\u00b0";
     private static final String REGEX_FIND_ENDING_PERIOD              = "\\.\\s*$";
     private static final String REGEX_REPLACE_ENDING_PERIOD           = "";
+    private static final String REGEX_FIND_TOO_CLOSE_COMMA            = ",(\\S)";
+    private static final String REGEX_REPLACE_TOO_CLOSE_COMMA         = ", $1";
+    private static final String REGEX_FIND_TOO_CLOSE_PARENTHESES      = "(\\S)(\\()";
+    private static final String REGEX_REPLACE_TOO_CLOSE_PARENTHESES   = "$1 $2";
 
     public static List<Recipe> extractRecipe(String json) {
         List<Recipe> recipes = new ArrayList<>();
@@ -90,6 +94,14 @@ public class Json {
                     ingredientAmount = currentIngredient.getDouble(RECIPE_L02_INGREDIENT_ONE_AMOUNT);
                     ingredientUnit = currentIngredient.getString(RECIPE_L02_INGREDIENT_ONE_UNIT);
                     ingredientName = currentIngredient.getString(RECIPE_L02_INGREDIENT_ONE_NAME);
+                    ingredientName = ingredientName.replaceAll(
+                            REGEX_FIND_TOO_CLOSE_COMMA,
+                            REGEX_REPLACE_TOO_CLOSE_COMMA
+                    );
+                    ingredientName = ingredientName.replaceAll(
+                            REGEX_FIND_TOO_CLOSE_PARENTHESES,
+                            REGEX_REPLACE_TOO_CLOSE_PARENTHESES
+                    );
                     Ingredient newIngredient = new Ingredient(
                             ingredientName,
                             (float) ingredientAmount,
