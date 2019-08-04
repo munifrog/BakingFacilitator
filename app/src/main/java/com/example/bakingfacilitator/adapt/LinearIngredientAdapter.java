@@ -16,13 +16,13 @@ import com.example.bakingfacilitator.model.Ingredient;
 import java.util.List;
 
 public class LinearIngredientAdapter extends RecyclerView.Adapter<LinearIngredientAdapter.ViewHolder> {
-    private static final String JSON_CUP                     = "CUP";
-    private static final String JSON_TABLE_SPOON             = "TBLSP";
-    private static final String JSON_TEA_SPOON               = "TSP";
-    private static final String JSON_GRAM_KILO               = "K";
-    private static final String JSON_GRAM                    = "G";
-    private static final String JSON_OUNCE                   = "OZ";
-    private static final String JSON_ENTIRE                  = "UNIT";
+    public static final String JSON_CUP                     = "CUP";
+    public static final String JSON_TABLE_SPOON             = "TBLSP";
+    public static final String JSON_TEA_SPOON               = "TSP";
+    public static final String JSON_GRAM_KILO               = "K";
+    public static final String JSON_GRAM                    = "G";
+    public static final String JSON_OUNCE                   = "OZ";
+    public static final String JSON_ENTIRE                  = "UNIT";
 
     private Listener mListener;
     private List<Ingredient> mIngredients;

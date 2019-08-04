@@ -9,6 +9,8 @@
     <string name="format_ingredient_unit">%1$.0f%2$s : %3$s</string>
     <string name="format_ingredient_portion">%1$.02f%2$s : %3$s</string>
     <string name="format_direction_order">#%1$d</string>
+    <string name="format_widget_ingredient_unit">\u2022 %1$.0f%2$s : %3$s</string>
+    <string name="format_widget_ingredient_portion">\u2022 %1$.02f%2$s : %3$s</string>
 
     <string name="conversion_whole_entire"/>
     <string name="conversion_gram_kilo">kg</string>
@@ -23,4 +25,6 @@
 
     <string name="announce_none_before">Already at first direction!</string>
     <string name="announce_none_after">No more directions!</string>
+
+    <string name="widget_empty">No ingredients to show!\nHave you selected a recipe?</string>
 </resources>

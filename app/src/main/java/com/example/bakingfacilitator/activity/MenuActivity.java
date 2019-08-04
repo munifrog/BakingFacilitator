@@ -1,5 +1,7 @@
 package com.example.bakingfacilitator.activity;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -15,9 +17,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bakingfacilitator.R;
 import com.example.bakingfacilitator.adapt.GridMenuAdapter;
+import com.example.bakingfacilitator.model.Ingredient;
 import com.example.bakingfacilitator.model.Recipe;
 import com.example.bakingfacilitator.model.ViewModel;
 import com.example.bakingfacilitator.model.ViewModelFactory;
+import com.example.bakingfacilitator.widget.WidgetProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +32,7 @@ public class MenuActivity extends AppCompatActivity implements ViewModel.Listene
         GridMenuAdapter.Listener
 {
     public static final String PARCELABLE_RECIPE_LIST = "entire_recipe_array";
+    public static final String PARCELABLE_INGREDIENT_LIST = "one_recipe_ingredient_array";
 
     private static final int COLUMN_SPAN_PORTRAIT_PHONE = 1;
     private static final int COLUMN_SPAN_PORTRAIT_TABLET = 1;
@@ -97,10 +102,45 @@ public class MenuActivity extends AppCompatActivity implements ViewModel.Listene
     public void onClick(int position) {
         List<Recipe> recipes = mViewModel.getRecipes();
         if (recipes != null) {
-            Intent recipeIntent = new Intent(MenuActivity.this, RecipeActivity.class);
-            recipeIntent.putExtra(PARCELABLE_RECIPE, recipes.get(position));
-            startActivity(recipeIntent);
+            Recipe recipe = recipes.get(position);
+            updateWidget(recipe.getIngredients());
+            launchRecipe(recipe);
         }
+    }
+
+    private void launchRecipe(Recipe recipe) {
+        Intent recipeIntent = new Intent(MenuActivity.this, RecipeActivity.class);
+        recipeIntent.putExtra(PARCELABLE_RECIPE, recipe);
+        startActivity(recipeIntent);
+    }
+
+    private void updateWidget(List<Ingredient> ingredients) {
+        // From https://stackoverflow.com/questions/3455123/programmatically-update-widget-from-activity-service-receiver
+        ComponentName componentName = new ComponentName(this, WidgetProvider.class);
+        AppWidgetManager manager = AppWidgetManager.getInstance(this);
+        Intent intent = new Intent(this, WidgetProvider.class);
+        intent.putExtra(
+                PARCELABLE_INGREDIENT_LIST,
+                (ArrayList<Ingredient>) ingredients
+        );
+        intent.putExtra(
+                AppWidgetManager.EXTRA_APPWIDGET_IDS,
+                manager.getAppWidgetIds(componentName)
+        );
+        sendBroadcast(intent);
+        notifyWidget();
+    }
+
+    private void notifyWidget() {
+        ComponentName componentName = new ComponentName(
+                this,
+                WidgetProvider.class
+        );
+        AppWidgetManager manager = AppWidgetManager.getInstance(this);
+        manager.notifyAppWidgetViewDataChanged(
+                manager.getAppWidgetIds(componentName),
+                R.id.lv_ingredients
+        );
     }
 
     @Override
