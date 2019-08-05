@@ -14,6 +14,7 @@
     <color name="defaultMenuCardBackground">@color/vanilla</color>
     <color name="defaultRecipeBackground">@color/chocolateLight</color>
     <color name="defaultViewerBackground">@color/vanilla</color>
+    <color name="defaultExoPlayerControlsBackground">#CC000000</color>
 
     <color name="textMenuCard">@color/chocolateLight</color>
     <color name="textRecipe">@color/vanilla</color>
