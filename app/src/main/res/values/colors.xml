@@ -5,6 +5,7 @@
     <color name="chocolateDark">#522F16</color>
     <color name="vanilla">#E6DEB8</color>
     <color name="custard">#FFE69C</color>
+    <color name="frosting">#C0FFFFFF</color>
 
     <color name="colorPrimary">@color/chocolateLight</color>
     <color name="colorPrimaryDark">@color/chocolateDark</color>
@@ -19,4 +20,5 @@
     <color name="textMenuCard">@color/chocolateLight</color>
     <color name="textRecipe">@color/vanilla</color>
     <color name="textViewer">@color/chocolateLight</color>
+    <color name="textViewerError">@color/frosting</color>
 </resources>

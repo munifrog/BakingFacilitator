@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -13,20 +14,29 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.bakingfacilitator.R;
 import com.example.bakingfacilitator.model.Direction;
 import com.example.bakingfacilitator.util.Media;
+import com.google.android.exoplayer2.ExoPlaybackException;
+import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.ui.PlayerView;
 
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ViewerActivity extends AppCompatActivity implements Media.Listener {
+public class ViewerActivity extends AppCompatActivity implements Media.Listener,
+        ExoPlayer.EventListener
+{
     public static final String PARCELABLE_DIRECTION_ARRAY = "all_directions";
     public static final String CURRENT_DIRECTION_INDEX = "current_direction";
+
+    private static final String MSG_FAILED_TO_CONNECT = "Unable to connect";
 
     private PlayerView mPlayerView;
     private Media mMedia;
     private List<Direction> mDirections;
     private int mCurrentIndex;
+    private ProgressBar mProgressBar;
+    private TextView mErrorMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,27 +55,51 @@ public class ViewerActivity extends AppCompatActivity implements Media.Listener 
             TextView tvDirection = findViewById(R.id.tv_description);
             tvDirection.setText(direction.getDescribeFull());
 
+            FrameLayout exoFrame = findViewById(R.id.exo_frame_and_progress);
             mPlayerView = findViewById(R.id.exo_player_frame);
+            mErrorMessage = findViewById(R.id.tv_error_video_load);
             URL video = direction.getUrlVideo();
-            if (video == null) {
-                mPlayerView.setVisibility(View.GONE);
-            } else {
-                ProgressBar pb = findViewById(R.id.pb_loading_indicator);
-                pb.setVisibility(View.VISIBLE);
 
-                mPlayerView.setVisibility(View.VISIBLE);
+            if (video == null) {
+                exoFrame.setVisibility(View.GONE);
+            } else {
+                mProgressBar = findViewById(R.id.pb_loading_indicator);
+                mProgressBar.setVisibility(View.VISIBLE);
+                mErrorMessage.setVisibility(View.GONE);
+                exoFrame.setVisibility(View.VISIBLE);
+
                 Uri uri = Uri.parse(video.toString());
                 mMedia = new Media(this, this, uri);
-                mPlayerView.setPlayer(mMedia.getPlayer());
+
+                ExoPlayer player = mMedia.getPlayer();
+                player.addListener(this);
+                mPlayerView.setPlayer(player);
             }
         }
     }
 
     @Override
     public void onLoadingChanged(boolean isLoading) {
-        if (!isLoading) {
-            ProgressBar pb = findViewById(R.id.pb_loading_indicator);
-            pb.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onPlayerError(ExoPlaybackException error) {
+        if (error.getMessage().contains(MSG_FAILED_TO_CONNECT)) {
+            mErrorMessage.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+        switch (playbackState) {
+            case Player.STATE_READY:
+            case Player.STATE_IDLE:
+                mProgressBar.setVisibility(View.GONE);
+                break;
+            default:
+            case Player.STATE_BUFFERING:
+            case Player.STATE_ENDED:
+                break;
         }
     }
 
@@ -73,6 +107,7 @@ public class ViewerActivity extends AppCompatActivity implements Media.Listener 
     protected void onDestroy() {
         super.onDestroy();
         if (mMedia != null) {
+            mMedia.getPlayer().removeListener(this);
             mMedia.destroy();
         }
     }
