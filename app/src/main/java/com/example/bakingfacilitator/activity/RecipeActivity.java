@@ -1,5 +1,6 @@
 package com.example.bakingfacilitator.activity;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -25,6 +26,8 @@ public class RecipeActivity extends AppCompatActivity implements LinearIngredien
 {
     public static final String PARCELABLE_RECIPE = "one_recipe";
     public static final String CURRENT_DIRECTION = "current_direction";
+
+    private static final int RESULT_REQUEST_CODE = 132;
 
     private Recipe mRecipe;
     private boolean mTwoPane;
@@ -106,7 +109,7 @@ public class RecipeActivity extends AppCompatActivity implements LinearIngredien
                     (ArrayList<Direction>) mRecipe.getDirections()
             );
             intent.putExtra(CURRENT_DIRECTION_INDEX, position);
-            startActivity(intent);
+            startActivityForResult(intent, RESULT_REQUEST_CODE);
         }
     }
 
@@ -127,6 +130,17 @@ public class RecipeActivity extends AppCompatActivity implements LinearIngredien
             mFragmentManager.beginTransaction()
                     .remove(mFragment) // audio stops completely
                     .commit();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (RESULT_REQUEST_CODE == requestCode && data != null && RESULT_OK == resultCode) {
+            mCurrentDirection = data.getIntExtra(CURRENT_DIRECTION, 0);
+            mFragment = DirectionViewerFragment.newInstance(
+                    mRecipe.getDirections().get(mCurrentDirection)
+            );
         }
     }
 

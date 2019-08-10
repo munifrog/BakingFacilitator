@@ -1,6 +1,7 @@
 package com.example.bakingfacilitator.activity;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -20,8 +21,9 @@ import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.ui.PlayerView;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
+
+import static com.example.bakingfacilitator.activity.RecipeActivity.CURRENT_DIRECTION;
 
 public class ViewerActivity extends AppCompatActivity implements Media.Listener,
         ExoPlayer.EventListener
@@ -43,6 +45,19 @@ public class ViewerActivity extends AppCompatActivity implements Media.Listener,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_viewer);
 
+        if (savedInstanceState != null) {
+            mCurrentIndex = savedInstanceState.getInt(CURRENT_DIRECTION_INDEX);
+        }
+
+        Configuration config = getResources().getConfiguration();
+        if (config.screenWidthDp > 300 && config.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            // https://stackoverflow.com/questions/10407159/how-to-manage-startactivityforresult-on-android
+            Intent returnIntent = new Intent();
+            returnIntent.putExtra(CURRENT_DIRECTION, mCurrentIndex);
+            setResult(RESULT_OK, returnIntent);
+            finish();
+        }
+
         Intent intent = getIntent();
 
         if (intent == null || !intent.hasExtra(PARCELABLE_DIRECTION_ARRAY)) {
@@ -50,31 +65,39 @@ public class ViewerActivity extends AppCompatActivity implements Media.Listener,
         } else {
             mDirections = intent.getParcelableArrayListExtra(PARCELABLE_DIRECTION_ARRAY);
             mCurrentIndex = intent.getIntExtra(CURRENT_DIRECTION_INDEX, 0);
-            Direction direction = mDirections.get(mCurrentIndex);
-
-            TextView tvDirection = findViewById(R.id.tv_description);
-            tvDirection.setText(direction.getDescribeFull());
-
-            FrameLayout exoFrame = findViewById(R.id.exo_frame_and_progress);
             mPlayerView = findViewById(R.id.exo_player_frame);
             mErrorMessage = findViewById(R.id.tv_error_video_load);
-            URL video = direction.getUrlVideo();
+            mProgressBar = findViewById(R.id.pb_loading_indicator);
 
-            if (video == null) {
-                exoFrame.setVisibility(View.GONE);
-            } else {
-                mProgressBar = findViewById(R.id.pb_loading_indicator);
-                mProgressBar.setVisibility(View.VISIBLE);
-                mErrorMessage.setVisibility(View.GONE);
-                exoFrame.setVisibility(View.VISIBLE);
+            setupDirectionView();
+        }
+    }
 
-                Uri uri = Uri.parse(video.toString());
-                mMedia = new Media(this, this, uri);
+    private void setupDirectionView() {
+        Direction direction = mDirections.get(mCurrentIndex);
 
-                ExoPlayer player = mMedia.getPlayer();
-                player.addListener(this);
-                mPlayerView.setPlayer(player);
+        TextView tvDirection = findViewById(R.id.tv_description);
+        tvDirection.setText(direction.getDescribeFull());
+
+        FrameLayout exoFrame = findViewById(R.id.exo_frame_and_progress);
+        URL video = direction.getUrlVideo();
+
+        if (video == null) {
+            exoFrame.setVisibility(View.GONE);
+        } else {
+            mProgressBar.setVisibility(View.VISIBLE);
+            mErrorMessage.setVisibility(View.GONE);
+            exoFrame.setVisibility(View.VISIBLE);
+
+            Uri uri = Uri.parse(video.toString());
+            if (mMedia != null) {
+                mMedia.destroy();
             }
+            mMedia = new Media(this, this, uri);
+
+            ExoPlayer player = mMedia.getPlayer();
+            player.addListener(this);
+            mPlayerView.setPlayer(player);
         }
     }
 
@@ -131,13 +154,13 @@ public class ViewerActivity extends AppCompatActivity implements Media.Listener,
     }
 
     private void navigate(int newPosition) {
-        Intent intent = new Intent(ViewerActivity.this, ViewerActivity.class);
-        intent.putParcelableArrayListExtra(
-                PARCELABLE_DIRECTION_ARRAY,
-                (ArrayList<Direction>) mDirections
-        );
-        intent.putExtra(CURRENT_DIRECTION_INDEX, newPosition);
-        finish();
-        startActivity(intent);
+        mCurrentIndex = newPosition;
+        setupDirectionView();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(CURRENT_DIRECTION_INDEX, mCurrentIndex);
     }
 }
