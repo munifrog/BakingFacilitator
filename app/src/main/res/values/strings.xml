@@ -18,7 +18,7 @@
     <string name="conversion_cup">cup</string>
     <string name="conversion_ounce">oz</string>
     <string name="conversion_teaspoon">tsp</string>
-    <string name="conversion_tablespoon">tblspn</string>
+    <string name="conversion_tablespoon">tbsp</string>
 
     <string name="button_previous">Previous</string>
     <string name="button_next">Next</string>
