@@ -13,7 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.bakingfacilitator.R;
 import com.example.bakingfacilitator.model.Direction;
 import com.example.bakingfacilitator.util.Media;
-import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
+import com.google.android.exoplayer2.ui.PlayerView;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ public class ViewerActivity extends AppCompatActivity implements Media.Listener 
     public static final String PARCELABLE_DIRECTION_ARRAY = "all_directions";
     public static final String CURRENT_DIRECTION_INDEX = "current_direction";
 
-    private SimpleExoPlayerView mPlayerView;
+    private PlayerView mPlayerView;
     private Media mMedia;
     private List<Direction> mDirections;
     private int mCurrentIndex;

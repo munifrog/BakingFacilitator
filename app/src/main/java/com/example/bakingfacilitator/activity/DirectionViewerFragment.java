@@ -17,7 +17,7 @@ import android.widget.TextView;
 import com.example.bakingfacilitator.R;
 import com.example.bakingfacilitator.model.Direction;
 import com.example.bakingfacilitator.util.Media;
-import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
+import com.google.android.exoplayer2.ui.PlayerView;
 
 import java.net.URL;
 
@@ -29,7 +29,7 @@ import java.net.URL;
 public class DirectionViewerFragment extends Fragment implements Media.Listener {
     private static final String PARCELABLE_DIRECTION = "one_direction";
 
-    private SimpleExoPlayerView mPlayerView;
+    private PlayerView mPlayerView;
     private Media mMedia;
     private Direction mDirection;
     private ProgressBar mProgressBar;
@@ -93,8 +93,8 @@ public class DirectionViewerFragment extends Fragment implements Media.Listener 
     }
 
     @Override
-    public void onDetach() {
-        super.onDetach();
+    public void onDestroyView() {
+        super.onDestroyView();
         if (mMedia != null) {
             mMedia.destroy();
         }
@@ -102,12 +102,16 @@ public class DirectionViewerFragment extends Fragment implements Media.Listener 
 
     @Override
     public void onLoadingChanged(boolean isLoading) {
-        mProgressBar.setVisibility(View.GONE);
+        if (!isLoading) {
+            mProgressBar.setVisibility(View.GONE);
+        }
     }
-
 
     @Override
     public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
+        if (mPlayerView != null && mMedia != null) {
+            mPlayerView.setPlayer(mMedia.getPlayer());
+        }
     }
 }

@@ -8,7 +8,6 @@ import android.support.v4.media.session.PlaybackStateCompat;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
-import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
@@ -21,7 +20,7 @@ public class Media implements ExoPlayer.EventListener {
 
     private static MediaSessionCompat mMediaSession;
     private PlaybackStateCompat.Builder mStateBuilder;
-    private SimpleExoPlayer mExoPlayer;
+    private ExoPlayer mExoPlayer;
     private Context mContext;
     private Uri mMediaUri;
     private Listener mListener;
@@ -56,7 +55,7 @@ public class Media implements ExoPlayer.EventListener {
         mMediaSession.setActive(true);
     }
 
-    public SimpleExoPlayer getPlayer() {
+    public ExoPlayer getPlayer() {
         if (mExoPlayer == null) {
             mExoPlayer = ExoPlayerFactory.newSimpleInstance(
                     mContext,

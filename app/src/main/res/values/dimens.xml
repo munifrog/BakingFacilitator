@@ -14,6 +14,8 @@
 
     <dimen name="padding_viewer_player_horizontal">0dp</dimen>
     <dimen name="padding_viewer_player_vertical">0dp</dimen>
+    <dimen name="padding_viewer_player_time_horizontal">4dp</dimen>
+    <dimen name="padding_viewer_player_time_vertical">4dp</dimen>
     <dimen name="padding_viewer_description_horizontal">16dp</dimen>
     <dimen name="padding_viewer_description_vertical">16dp</dimen>
 

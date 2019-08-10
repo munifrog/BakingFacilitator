@@ -125,7 +125,7 @@ public class RecipeActivity extends AppCompatActivity implements LinearIngredien
         super.onPause();
         if (mTwoPane && mFragmentManager != null) {
             mFragmentManager.beginTransaction()
-                    .detach(mFragment)
+                    .remove(mFragment) // audio stops completely
                     .commit();
         }
     }
