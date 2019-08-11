@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="licorice">#FF000000</color>
     <color name="chocolateSuperLight">#A57538</color>
     <color name="chocolateLight">#7A4A1D</color>
     <color name="chocolateDark">#522F16</color>
@@ -20,5 +21,5 @@
     <color name="textMenuCard">@color/chocolateLight</color>
     <color name="textRecipe">@color/vanilla</color>
     <color name="textViewer">@color/chocolateLight</color>
-    <color name="textViewerError">@color/frosting</color>
+    <color name="textViewerError">@color/licorice</color>
 </resources>

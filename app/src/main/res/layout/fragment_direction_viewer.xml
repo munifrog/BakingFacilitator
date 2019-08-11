@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/defaultViewerBackground" >
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/defaultViewerBackground">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -16,7 +17,6 @@
             android:orientation="vertical">
 
             <FrameLayout
-                android:id="@+id/exo_frame_and_progress"
                 android:layout_width="match_parent"
                 android:layout_height="400dp"
                 android:visibility="visible" >
@@ -24,12 +24,21 @@
                 <com.google.android.exoplayer2.ui.PlayerView
                     android:id="@+id/exo_player_frame"
                     android:layout_width="match_parent"
-                    android:layout_height="400dp"
+                    android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:layout_marginTop="@dimen/padding_viewer_player_vertical"
                     android:layout_marginBottom="@dimen/padding_viewer_player_vertical"
                     android:layout_marginRight="@dimen/padding_viewer_player_horizontal"
-                    android:layout_marginLeft="@dimen/padding_viewer_player_horizontal" />
+                    android:layout_marginLeft="@dimen/padding_viewer_player_horizontal"
+                    app:default_artwork="@drawable/preparation" />
+
+                <ImageView
+                    android:id="@+id/iv_default_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/defaultExoPlayerControlsBackground"
+                    android:src="@drawable/preparation"
+                    android:scaleType="centerCrop"/>
 
                 <TextView
                     android:id="@+id/tv_error_video_load"
@@ -41,9 +50,12 @@
                     android:paddingStart="@dimen/padding_viewer_description_horizontal"
                     android:paddingRight="@dimen/padding_viewer_description_horizontal"
                     android:paddingEnd="@dimen/padding_viewer_description_horizontal"
-                    android:textSize="@dimen/text_viewer_description"
+                    android:textSize="@dimen/text_viewer_internet_failure"
                     android:text="@string/error_video_not_available"
                     android:textColor="@color/textViewerError"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif-smallcaps"
+                    android:visibility="gone"
                     android:gravity="center"
                     android:layout_gravity="center" />
 
@@ -52,7 +64,7 @@
                     android:layout_width="42dp"
                     android:layout_height="42dp"
                     android:layout_gravity="center"
-                    android:visibility="invisible" />
+                    android:visibility="gone" />
 
             </FrameLayout>
 
