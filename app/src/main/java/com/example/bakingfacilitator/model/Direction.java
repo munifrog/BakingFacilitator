@@ -7,6 +7,15 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class Direction implements Parcelable {
+    private static final String REGEX_DELIMITER_ACTUAL = "|";
+    private static final String REGEX_DELIMITER_SYMBOLIC = "\\|";
+    private static final String EXT_DETECT_CORRECT_URL_VIDEO =
+            ".mp4";
+    private static final String EXT_DETECT_CORRECT_URL_IMAGE =
+            ".jpg" + REGEX_DELIMITER_ACTUAL +
+            ".jpeg" + REGEX_DELIMITER_ACTUAL +
+            ".png";
+
     private long mOrder;
     private String mDescribeFull;
     private String mDescribeShort;
@@ -25,6 +34,7 @@ public class Direction implements Parcelable {
         mDescribeShort = describeShort;
         mUrlVideo = string2url(urlVideo);
         mUrlThumb = string2url(urlThumb);
+        handleImageVideoSwitch();
     }
 
     private URL string2url(String input) {
@@ -41,6 +51,38 @@ public class Direction implements Parcelable {
 
     private String url2string(URL input) {
         return (input == null) ? "" : input.toString();
+    }
+
+    private void handleImageVideoSwitch() {
+        boolean imageCorrect = true;
+        String [] imagePossibilities = EXT_DETECT_CORRECT_URL_IMAGE.split(REGEX_DELIMITER_SYMBOLIC);
+        if (mUrlVideo != null) {
+            String videoString = mUrlVideo.toString();
+            for (int i = 0; imageCorrect && i < imagePossibilities.length; i++) {
+                if (videoString.endsWith(imagePossibilities[i])) {
+                    imageCorrect = false;
+                }
+            }
+        }
+        boolean videoCorrect = true;
+        String [] videoPossibilities = EXT_DETECT_CORRECT_URL_VIDEO.split(REGEX_DELIMITER_SYMBOLIC);
+        if (mUrlThumb != null) {
+            String imageString = mUrlThumb.toString();
+            for (int i = 0; videoCorrect && i < videoPossibilities.length; i++) {
+                if (imageString.endsWith(videoPossibilities[i])) {
+                    videoCorrect = false;
+                }
+            }
+        }
+        if (!imageCorrect || !videoCorrect) {
+            switchImageAndVideo();
+        }
+    }
+
+    private void switchImageAndVideo() {
+        URL placeholder = mUrlThumb;
+        mUrlThumb = mUrlVideo;
+        mUrlVideo = placeholder;
     }
 
     public void setOrder(long mOrder) { this.mOrder = mOrder; }
