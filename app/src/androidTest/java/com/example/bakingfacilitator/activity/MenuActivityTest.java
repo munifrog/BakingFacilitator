@@ -27,9 +27,12 @@ public class MenuActivityTest {
 
     @Test
     public void clickingMenuItemLaunchesCorrectRecipe() {
+        // Wake screen before running tests; otherwise the click will be absorbed
+        onView(withId(R.id.frame_menu))
+                .perform(click())
+        ;
         // This author suggests using RecyclerViewActions class from espresso-contrib:
         // https://spin.atomicobject.com/2016/04/15/espresso-testing-recyclerviews/
-        // TODO: Wake screen before running tests; otherwise the click will be absorbed
         onView(withId(R.id.rv_menu))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(2, click()))
         ;
