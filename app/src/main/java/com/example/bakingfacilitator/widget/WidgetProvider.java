@@ -13,8 +13,11 @@ import com.example.bakingfacilitator.model.Ingredient;
 import java.util.List;
 
 import static com.example.bakingfacilitator.activity.MenuActivity.PARCELABLE_INGREDIENT_LIST;
+import static com.example.bakingfacilitator.activity.MenuActivity.SELECTED_RECIPE_NAME;
 
 public class WidgetProvider extends AppWidgetProvider {
+    private String mRecipeName;
+
     @Override
     public void onAppWidgetOptionsChanged(Context context, AppWidgetManager appWidgetManager, int appWidgetId, Bundle newOptions) {
         super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions);
@@ -31,6 +34,7 @@ public class WidgetProvider extends AppWidgetProvider {
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_ingredients);
             views.setRemoteAdapter(R.id.lv_ingredients, serviceIntent);
             views.setEmptyView(R.id.lv_ingredients, R.id.tv_empty_view);
+            views.setTextViewText(R.id.tv_recipe_name, mRecipeName);
 
             appWidgetManager.updateAppWidget(appWidgetId, views);
         }
@@ -41,11 +45,18 @@ public class WidgetProvider extends AppWidgetProvider {
         super.onReceive(context, intent);
         if (intent != null && intent.hasExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS) &&
                 intent.hasExtra(PARCELABLE_INGREDIENT_LIST)) {
+            mRecipeName = intent.getStringExtra(SELECTED_RECIPE_NAME);
             List<Ingredient> ingredients = intent.getParcelableArrayListExtra(PARCELABLE_INGREDIENT_LIST);
             WidgetFactory.refreshData(ingredients);
 
             int [] widgetIds = intent.getIntArrayExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS);
             onUpdate(context, AppWidgetManager.getInstance(context), widgetIds);
+
+            AppWidgetManager manager = AppWidgetManager.getInstance(context);
+            manager.notifyAppWidgetViewDataChanged(
+                    widgetIds,
+                    R.id.lv_ingredients
+            );
         }
     }
 }

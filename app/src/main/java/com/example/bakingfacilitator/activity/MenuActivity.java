@@ -31,6 +31,7 @@ import static com.example.bakingfacilitator.activity.RecipeActivity.PARCELABLE_R
 public class MenuActivity extends AppCompatActivity implements ViewModel.Listener,
         GridMenuAdapter.Listener
 {
+    public static final String SELECTED_RECIPE_NAME = "name_of_selected_recipe";
     public static final String PARCELABLE_RECIPE_LIST = "entire_recipe_array";
     public static final String PARCELABLE_INGREDIENT_LIST = "one_recipe_ingredient_array";
 
@@ -103,7 +104,7 @@ public class MenuActivity extends AppCompatActivity implements ViewModel.Listene
         List<Recipe> recipes = mViewModel.getRecipes();
         if (recipes != null) {
             Recipe recipe = recipes.get(position);
-            updateWidget(recipe.getIngredients());
+            updateWidget(recipe.getRecipeName(), recipe.getIngredients());
             launchRecipe(recipe);
         }
     }
@@ -114,11 +115,15 @@ public class MenuActivity extends AppCompatActivity implements ViewModel.Listene
         startActivity(recipeIntent);
     }
 
-    private void updateWidget(List<Ingredient> ingredients) {
+    private void updateWidget(String recipeName, List<Ingredient> ingredients) {
         // From https://stackoverflow.com/questions/3455123/programmatically-update-widget-from-activity-service-receiver
         ComponentName componentName = new ComponentName(this, WidgetProvider.class);
         AppWidgetManager manager = AppWidgetManager.getInstance(this);
         Intent intent = new Intent(this, WidgetProvider.class);
+        intent.putExtra(
+                SELECTED_RECIPE_NAME,
+                recipeName
+        );
         intent.putExtra(
                 PARCELABLE_INGREDIENT_LIST,
                 (ArrayList<Ingredient>) ingredients
@@ -128,19 +133,6 @@ public class MenuActivity extends AppCompatActivity implements ViewModel.Listene
                 manager.getAppWidgetIds(componentName)
         );
         sendBroadcast(intent);
-        notifyWidget();
-    }
-
-    private void notifyWidget() {
-        ComponentName componentName = new ComponentName(
-                this,
-                WidgetProvider.class
-        );
-        AppWidgetManager manager = AppWidgetManager.getInstance(this);
-        manager.notifyAppWidgetViewDataChanged(
-                manager.getAppWidgetIds(componentName),
-                R.id.lv_ingredients
-        );
     }
 
     @Override
