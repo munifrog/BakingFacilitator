@@ -3,6 +3,7 @@ package com.example.bakingfacilitator.activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -41,18 +42,20 @@ public class ViewerActivity extends AppCompatActivity implements ExoPlayer.Event
     private ProgressBar mProgressBar;
     private TextView mErrorMessage;
     private ImageView mDefaultImage;
+    private long mPlayPosition;
+    private boolean mPlayImmediately;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_viewer);
 
-        long playPosition = 0;
-        boolean playImmediately = true;
+        mPlayPosition = 0;
+        mPlayImmediately = true;
         if (savedInstanceState != null) {
             mCurrentIndex = savedInstanceState.getInt(CURRENT_DIRECTION_INDEX);
-            playPosition = savedInstanceState.getLong(CURRENT_PLAYBACK_POSITION, playPosition);
-            playImmediately = savedInstanceState.getBoolean(CURRENT_PLAYBACK_STATE, playImmediately);
+            mPlayPosition = savedInstanceState.getLong(CURRENT_PLAYBACK_POSITION, mPlayPosition);
+            mPlayImmediately = savedInstanceState.getBoolean(CURRENT_PLAYBACK_STATE, mPlayImmediately);
         }
 
         Configuration config = getResources().getConfiguration();
@@ -60,8 +63,8 @@ public class ViewerActivity extends AppCompatActivity implements ExoPlayer.Event
             // https://stackoverflow.com/questions/10407159/how-to-manage-startactivityforresult-on-android
             Intent returnIntent = new Intent();
             returnIntent.putExtra(CURRENT_DIRECTION, mCurrentIndex);
-            returnIntent.putExtra(CURRENT_PLAYBACK_POSITION, playPosition);
-            returnIntent.putExtra(CURRENT_PLAYBACK_STATE, playImmediately);
+            returnIntent.putExtra(CURRENT_PLAYBACK_POSITION, mPlayPosition);
+            returnIntent.putExtra(CURRENT_PLAYBACK_STATE, mPlayImmediately);
             setResult(RESULT_OK, returnIntent);
             finish();
         }
@@ -78,19 +81,15 @@ public class ViewerActivity extends AppCompatActivity implements ExoPlayer.Event
         mErrorMessage = findViewById(R.id.tv_error_video_load);
         mProgressBar = findViewById(R.id.pb_loading_indicator);
         mDefaultImage = findViewById(R.id.iv_default_image);
-
-        setupDirectionView(playPosition, playImmediately);
     }
 
-    private void setupDirectionView(long playPosition, boolean playImmediately) {
+    private void setupDirectionView() {
         Direction direction = mDirections.get(mCurrentIndex);
 
         TextView tvDirection = findViewById(R.id.tv_description);
         tvDirection.setText(direction.getDescribeFull());
 
-        if (mMedia != null) {
-            mMedia.destroy();
-        }
+        tearDownDirectionView();
         mErrorMessage.setVisibility(View.GONE);
         URL video = direction.getUrlVideo();
         if (video == null) {
@@ -121,10 +120,18 @@ public class ViewerActivity extends AppCompatActivity implements ExoPlayer.Event
             mMedia = new Media(this, uri);
 
             ExoPlayer player = mMedia.getPlayer();
-            player.setPlayWhenReady(playImmediately);
-            player.seekTo(playPosition);
+            player.setPlayWhenReady(mPlayImmediately);
+            player.seekTo(mPlayPosition);
             player.addListener(this);
             mPlayerView.setPlayer(player);
+        }
+    }
+
+    private void tearDownDirectionView() {
+        if (mMedia != null) {
+            mMedia.getPlayer().removeListener(this);
+            mMedia.destroy();
+            mMedia = null;
         }
     }
 
@@ -153,11 +160,34 @@ public class ViewerActivity extends AppCompatActivity implements ExoPlayer.Event
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (mMedia != null) {
-            mMedia.getPlayer().removeListener(this);
-            mMedia.destroy();
+    public void onStart() {
+        super.onStart();
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+            setupDirectionView();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) {
+            setupDirectionView();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) {
+            tearDownDirectionView();
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+            tearDownDirectionView();
         }
     }
 
@@ -181,7 +211,9 @@ public class ViewerActivity extends AppCompatActivity implements ExoPlayer.Event
 
     private void navigate(int newPosition) {
         mCurrentIndex = newPosition;
-        setupDirectionView(0, true);
+        mPlayPosition = 0;
+        mPlayImmediately = true;
+        setupDirectionView();
     }
 
     @Override

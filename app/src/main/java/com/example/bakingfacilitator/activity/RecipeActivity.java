@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.widget.TextView;
 
@@ -94,17 +95,8 @@ public class RecipeActivity extends AppCompatActivity implements LinearIngredien
 
         mTwoPane = findViewById(R.id.two_pane_view) != null;
         if (mTwoPane) {
-            updateFragment();
             mFragmentManager = getSupportFragmentManager();
         }
-    }
-
-    private void updateFragment() {
-        mFragment = DirectionViewerFragment.newInstance(
-                mRecipe.getDirections().get(mCurrentDirection),
-                mLastPlayPosition,
-                mLastPlayImmediatelyState
-        );
     }
 
     @Override
@@ -119,10 +111,7 @@ public class RecipeActivity extends AppCompatActivity implements LinearIngredien
                 mCurrentDirection = position;
                 mLastPlayPosition = 0;
                 mLastPlayImmediatelyState = true;
-                updateFragment();
-                mFragmentManager.beginTransaction()
-                        .replace(R.id.fragment_direction, mFragment)
-                        .commit();
+                replaceFragment();
             }
         } else {
             mCurrentDirection = position;
@@ -136,24 +125,82 @@ public class RecipeActivity extends AppCompatActivity implements LinearIngredien
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
+    private void generateNewFragment() {
+        releaseFragment();
+        mFragment = DirectionViewerFragment.newInstance(
+                mRecipe.getDirections().get(mCurrentDirection),
+                mLastPlayPosition,
+                mLastPlayImmediatelyState
+        );
+    }
+
+    private void addFragment() {
         if (mTwoPane && mFragmentManager != null) {
+            generateNewFragment();
             mFragmentManager.beginTransaction()
                     .add(R.id.fragment_direction, mFragment)
                     .commit();
         }
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
+    private void replaceFragment() {
+        if (mTwoPane && mFragmentManager != null) {
+            generateNewFragment();
+            mFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_direction, mFragment)
+                    .commit();
+        }
+    }
+
+    private void removeFragment() {
         if (mTwoPane && mFragmentManager != null) {
             mFragmentManager.beginTransaction()
                     .remove(mFragment) // audio stops completely
                     .commit();
+            releaseFragment();
         }
+    }
+
+    private void releaseFragment() {
+        if (mFragment != null) {
+            mFragment.release();
+            mFragment = null;
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+            addFragment();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) {
+            if (mTwoPane && mFragmentManager != null) {
+                addFragment();
+            }
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        // Default to using the previous values since the user might tilt back again
+        if (mTwoPane && mFragment != null) {
+            mLastPlayPosition = mFragment.getCurrentPlayPosition();
+            mLastPlayImmediatelyState = mFragment.getCurrentPlayImmediatelyState();
+        }
+        removeFragment();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        // Unable to remove fragment this late;
     }
 
     @Override
@@ -163,7 +210,7 @@ public class RecipeActivity extends AppCompatActivity implements LinearIngredien
             mCurrentDirection = data.getIntExtra(CURRENT_DIRECTION, 0);
             mLastPlayPosition = data.getLongExtra(CURRENT_PLAYBACK_POSITION, 0);
             mLastPlayImmediatelyState = data.getBooleanExtra(CURRENT_PLAYBACK_STATE, true);
-            updateFragment();
+            replaceFragment();
         }
     }
 
@@ -172,15 +219,7 @@ public class RecipeActivity extends AppCompatActivity implements LinearIngredien
         super.onSaveInstanceState(outState);
         outState.putParcelable(PARCELABLE_RECIPE, mRecipe);
         outState.putInt(CURRENT_DIRECTION, mCurrentDirection);
-
-        // Default to using the previous values since the user might tilt back again
-        long playPosition = mLastPlayPosition;
-        boolean playImmediately = mLastPlayImmediatelyState;
-        if (mTwoPane && mFragment != null) {
-            playPosition = mFragment.getCurrentPlayPosition();
-            playImmediately = mFragment.getCurrentPlayImmediatelyState();
-        }
-        outState.putLong(CURRENT_PLAYBACK_POSITION, playPosition);
-        outState.putBoolean(CURRENT_PLAYBACK_STATE, playImmediately);
+        outState.putLong(CURRENT_PLAYBACK_POSITION, mLastPlayPosition);
+        outState.putBoolean(CURRENT_PLAYBACK_STATE, mLastPlayImmediatelyState);
     }
 }

@@ -87,7 +87,6 @@ public class DirectionViewerFragment extends Fragment implements ExoPlayer.Event
 
             Bundle args = getArguments();
             Direction direction = args.getParcelable(PARCELABLE_DIRECTION);
-
             long playPosition = args.getLong(CURRENT_PLAYBACK_POSITION);
             boolean playImmediately = args.getBoolean(CURRENT_PLAYBACK_STATE);
 
@@ -139,13 +138,17 @@ public class DirectionViewerFragment extends Fragment implements ExoPlayer.Event
         return view;
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
+    void release() {
         if (mMedia != null) {
             mMedia.getPlayer().removeListener(this);
             mMedia.destroy();
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        release();
     }
 
     @Override

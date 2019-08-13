@@ -76,6 +76,7 @@ public class Media implements ExoPlayer.EventListener {
 
     private void releasePlayer() {
         if (mExoPlayer != null) {
+            mExoPlayer.removeListener(this);
             mExoPlayer.stop();
             mExoPlayer.release();
             mExoPlayer = null;
