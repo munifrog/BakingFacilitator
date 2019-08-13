@@ -26,14 +26,15 @@ import com.squareup.picasso.Picasso;
 
 import java.net.URL;
 
+import static com.example.bakingfacilitator.activity.RecipeActivity.CURRENT_PLAYBACK_POSITION;
+import static com.example.bakingfacilitator.activity.RecipeActivity.CURRENT_PLAYBACK_STATE;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link DirectionViewerFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DirectionViewerFragment extends Fragment implements Media.Listener,
-        ExoPlayer.EventListener
-{
+public class DirectionViewerFragment extends Fragment implements ExoPlayer.EventListener {
     private static final String PARCELABLE_DIRECTION = "one_direction";
     private static final String MSG_FAILED_TO_CONNECT = "Unable to connect";
 
@@ -54,10 +55,16 @@ public class DirectionViewerFragment extends Fragment implements Media.Listener,
      * @param direction Current Direction.
      * @return A new instance of fragment DirectionViewerFragment.
      */
-    static DirectionViewerFragment newInstance(Direction direction) {
+    static DirectionViewerFragment newInstance(
+            Direction direction,
+            long playPosition,
+            boolean playImmediately
+    ) {
         DirectionViewerFragment fragment = new DirectionViewerFragment();
         Bundle args = new Bundle();
         args.putParcelable(PARCELABLE_DIRECTION, direction);
+        args.putLong(CURRENT_PLAYBACK_POSITION, playPosition);
+        args.putBoolean(CURRENT_PLAYBACK_STATE, playImmediately);
         fragment.setArguments(args);
         return fragment;
     }
@@ -78,7 +85,11 @@ public class DirectionViewerFragment extends Fragment implements Media.Listener,
             LinearLayout buttonView = view.findViewById(R.id.btn_direction_navigation);
             buttonView.setVisibility(View.GONE);
 
-            Direction direction = getArguments().getParcelable(PARCELABLE_DIRECTION);
+            Bundle args = getArguments();
+            Direction direction = args.getParcelable(PARCELABLE_DIRECTION);
+
+            long playPosition = args.getLong(CURRENT_PLAYBACK_POSITION);
+            boolean playImmediately = args.getBoolean(CURRENT_PLAYBACK_STATE);
 
             TextView tvDirection = view.findViewById(R.id.tv_description);
             tvDirection.setText(direction.getDescribeFull());
@@ -115,9 +126,11 @@ public class DirectionViewerFragment extends Fragment implements Media.Listener,
                 mDefaultImage.setVisibility(View.GONE);
 
                 Uri uri = Uri.parse(video.toString());
-                mMedia = new Media(view.getContext(), this, uri);
+                mMedia = new Media(view.getContext(), uri);
 
                 ExoPlayer player = mMedia.getPlayer();
+                player.setPlayWhenReady(playImmediately);
+                player.seekTo(playPosition);
                 player.addListener(this);
                 mPlayerView.setPlayer(player);
             }
@@ -133,10 +146,6 @@ public class DirectionViewerFragment extends Fragment implements Media.Listener,
             mMedia.getPlayer().removeListener(this);
             mMedia.destroy();
         }
-    }
-
-    @Override
-    public void onLoadingChanged(boolean isLoading) {
     }
 
     @Override
@@ -169,5 +178,21 @@ public class DirectionViewerFragment extends Fragment implements Media.Listener,
         if (mPlayerView != null && mMedia != null) {
             mPlayerView.setPlayer(mMedia.getPlayer());
         }
+    }
+
+    long getCurrentPlayPosition() {
+        long result = 0;
+        if (mMedia != null) {
+            result = mMedia.getPlayer().getCurrentPosition();
+        }
+        return result;
+    }
+
+    boolean getCurrentPlayImmediatelyState() {
+        boolean result = true;
+        if (mMedia != null) {
+            result = mMedia.getPlayer().getPlayWhenReady();
+        }
+        return result;
     }
 }

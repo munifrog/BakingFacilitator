@@ -5,7 +5,6 @@ import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -26,10 +25,10 @@ import java.net.URL;
 import java.util.List;
 
 import static com.example.bakingfacilitator.activity.RecipeActivity.CURRENT_DIRECTION;
+import static com.example.bakingfacilitator.activity.RecipeActivity.CURRENT_PLAYBACK_POSITION;
+import static com.example.bakingfacilitator.activity.RecipeActivity.CURRENT_PLAYBACK_STATE;
 
-public class ViewerActivity extends AppCompatActivity implements Media.Listener,
-        ExoPlayer.EventListener
-{
+public class ViewerActivity extends AppCompatActivity implements ExoPlayer.EventListener {
     public static final String PARCELABLE_DIRECTION_ARRAY = "all_directions";
     public static final String CURRENT_DIRECTION_INDEX = "current_direction";
 
@@ -48,8 +47,12 @@ public class ViewerActivity extends AppCompatActivity implements Media.Listener,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_viewer);
 
+        long playPosition = 0;
+        boolean playImmediately = true;
         if (savedInstanceState != null) {
             mCurrentIndex = savedInstanceState.getInt(CURRENT_DIRECTION_INDEX);
+            playPosition = savedInstanceState.getLong(CURRENT_PLAYBACK_POSITION, playPosition);
+            playImmediately = savedInstanceState.getBoolean(CURRENT_PLAYBACK_STATE, playImmediately);
         }
 
         Configuration config = getResources().getConfiguration();
@@ -57,6 +60,8 @@ public class ViewerActivity extends AppCompatActivity implements Media.Listener,
             // https://stackoverflow.com/questions/10407159/how-to-manage-startactivityforresult-on-android
             Intent returnIntent = new Intent();
             returnIntent.putExtra(CURRENT_DIRECTION, mCurrentIndex);
+            returnIntent.putExtra(CURRENT_PLAYBACK_POSITION, playPosition);
+            returnIntent.putExtra(CURRENT_PLAYBACK_STATE, playImmediately);
             setResult(RESULT_OK, returnIntent);
             finish();
         }
@@ -74,10 +79,10 @@ public class ViewerActivity extends AppCompatActivity implements Media.Listener,
         mProgressBar = findViewById(R.id.pb_loading_indicator);
         mDefaultImage = findViewById(R.id.iv_default_image);
 
-        setupDirectionView();
+        setupDirectionView(playPosition, playImmediately);
     }
 
-    private void setupDirectionView() {
+    private void setupDirectionView(long playPosition, boolean playImmediately) {
         Direction direction = mDirections.get(mCurrentIndex);
 
         TextView tvDirection = findViewById(R.id.tv_description);
@@ -113,16 +118,14 @@ public class ViewerActivity extends AppCompatActivity implements Media.Listener,
             mDefaultImage.setVisibility(View.GONE);
 
             Uri uri = Uri.parse(video.toString());
-            mMedia = new Media(this, this, uri);
+            mMedia = new Media(this, uri);
 
             ExoPlayer player = mMedia.getPlayer();
+            player.setPlayWhenReady(playImmediately);
+            player.seekTo(playPosition);
             player.addListener(this);
             mPlayerView.setPlayer(player);
         }
-    }
-
-    @Override
-    public void onLoadingChanged(boolean isLoading) {
     }
 
     @Override
@@ -178,12 +181,15 @@ public class ViewerActivity extends AppCompatActivity implements Media.Listener,
 
     private void navigate(int newPosition) {
         mCurrentIndex = newPosition;
-        setupDirectionView();
+        setupDirectionView(0, true);
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        ExoPlayer player = mMedia.getPlayer();
         outState.putInt(CURRENT_DIRECTION_INDEX, mCurrentIndex);
+        outState.putLong(CURRENT_PLAYBACK_POSITION, player.getCurrentPosition());
+        outState.putBoolean(CURRENT_PLAYBACK_STATE, player.getPlayWhenReady());
     }
 }

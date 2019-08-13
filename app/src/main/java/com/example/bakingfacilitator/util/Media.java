@@ -23,17 +23,11 @@ public class Media implements ExoPlayer.EventListener {
     private ExoPlayer mExoPlayer;
     private Context mContext;
     private Uri mMediaUri;
-    private Listener mListener;
 
-    public Media(Context context, Listener listener, Uri mediaUri) {
+    public Media(Context context, Uri mediaUri) {
         mContext = context;
-        mListener = listener;
         mMediaUri = mediaUri;
         initializeMediaSession();
-    }
-
-    public interface Listener {
-        void onLoadingChanged(boolean isLoading);
     }
 
     private void initializeMediaSession() {
@@ -91,11 +85,6 @@ public class Media implements ExoPlayer.EventListener {
     public void destroy() {
         releasePlayer();
         mMediaSession.setActive(false);
-    }
-
-    @Override
-    public void onLoadingChanged(boolean isLoading) {
-        mListener.onLoadingChanged(isLoading);
     }
 
     @Override
