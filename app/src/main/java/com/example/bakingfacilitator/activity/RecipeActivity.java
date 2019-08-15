@@ -152,12 +152,11 @@ public class RecipeActivity extends AppCompatActivity implements LinearIngredien
         }
     }
 
-    private void removeFragment() {
+    private void detachFragment() {
         if (mTwoPane && mFragmentManager != null) {
             mFragmentManager.beginTransaction()
-                    .remove(mFragment) // audio stops completely
+                    .detach(mFragment) // audio continues
                     .commit();
-            releaseFragment();
         }
     }
 
@@ -180,9 +179,7 @@ public class RecipeActivity extends AppCompatActivity implements LinearIngredien
     protected void onResume() {
         super.onResume();
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) {
-            if (mTwoPane && mFragmentManager != null) {
-                addFragment();
-            }
+            addFragment();
         }
     }
 
@@ -194,13 +191,18 @@ public class RecipeActivity extends AppCompatActivity implements LinearIngredien
             mLastPlayPosition = mFragment.getCurrentPlayPosition();
             mLastPlayImmediatelyState = mFragment.getCurrentPlayImmediatelyState();
         }
-        removeFragment();
+        detachFragment();
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) {
+            releaseFragment(); // onStop may not be called in time; release early
+        }
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        // Unable to remove fragment this late;
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+            releaseFragment();
+        }
     }
 
     @Override
