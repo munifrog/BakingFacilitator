@@ -4,7 +4,7 @@ Android baking application that demonstrates the use of widgets, ExoPlayer, hand
 imperfect JavaScript Object Notation (JSON), and limited offline functionality making use of
 database storage.
 
-# Overview
+## Overview
 
 This app uses the internet to retrieve a JSON file containing various recipes, with the
 understanding that this file may change at any time, but the endpoint will stay the same.
@@ -26,7 +26,7 @@ time duplicating the original behavior using the same.
  1. Open this directory using Android Studio
  1. Launch the app on an emulator or device that has internet access
 
-# License
+## License
 This project started as a task within the [Udacity Android Developer Nanodegree Course](https://www.udacity.com/course/android-developer-nanodegree-by-google--nd801)
 and Udacity (or Google) owns the rights for the project idea.
 
