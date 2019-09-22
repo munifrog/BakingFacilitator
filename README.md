@@ -22,7 +22,7 @@ The files for this project were built using Android Studio, so you will likely h
 time duplicating the original behavior using the same.
 
  1. Clone this repository
-    * git clone https://github.com/munifrog/BakingFacilitator.git
+    * `git clone https://github.com/munifrog/BakingFacilitator.git`
  1. Open this directory using Android Studio
  1. Launch the app on an emulator or device that has internet access
 
